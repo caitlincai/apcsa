@@ -56,7 +56,7 @@ public class Flag extends JApplet {
 		double height = getHeight();
 		flag_width = A;
 		flag_height = B;
-		stripe_height = L;
+		stripe_height = L; uriwue
 		
 	}
 
