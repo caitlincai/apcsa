@@ -2,13 +2,10 @@
 
 /*
  * CAITLIN
- * MISHA
  */
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
-
 import javax.swing.JApplet;
 
 public class Flag extends JApplet {
@@ -26,6 +23,7 @@ public class Flag extends JApplet {
 	// REMEMBER: These are scale factors.  They are not numbers of pixels.
 	// You will use these and the width and height of the Applet to figure
 	// out how to draw the parts of the flag (stripes, stars, field).
+	
 	private final double A = 1.0;  // Hoist (width) of flag
 	private final double B = 1.9;  // Fly (length) of flag
 	private final double C = 7.0 / 13;  // Hoist of Union
@@ -38,9 +36,16 @@ public class Flag extends JApplet {
 	private final double L = 1.0 / 13;  // Width of stripe
 
 	// You will need to set values for these in paint()
-	private double flag_width;   // width of flag in pixels
-	private double flag_height;  // height of flag in pixels
-	private double stripe_height; // height of an individual stripe in pixels
+	private double flag_width = getWidth();   // width of flag in pixels
+	private double flag_height = getHeight();  // height of flag in pixels
+	private double stripe_height = L; // height of an individual stripe in pixels
+	
+	private int union_width;
+	private int union_height;
+	
+	private int STAR_POINTS;
+	private int[] polygonX;
+	private int[] polygonY;
 
 	// init() will automatically be called when an applet is run
 	public void init() {
@@ -54,27 +59,103 @@ public class Flag extends JApplet {
 	public void paint(Graphics g) {
 		double width = getWidth();
 		double height = getHeight();
-		flag_width = A;
-		flag_height = B;
-		stripe_height = L; uriwue
 		
+		flag_width = width;
+		flag_height = height;
+		stripe_height = height / STRIPES;
+		
+		union_width = (int)((D / B) * flag_width);
+		union_height = (int)((C / A) * flag_height);
+		
+		STAR_POINTS = 10;
+		polygonX = new int[STAR_POINTS];
+		polygonY = new int[STAR_POINTS];
+		
+		
+		if ((B/A) * flag_height > flag_width) {  
+			flag_height = (flag_width / (B / A));
+		} 
+		else {                   
+			flag_width = (flag_height * (B / A));
+		}
+		
+		drawBackground(g);
+		drawStripes(g);
+		drawUnion(g);
+		drawStars(g);
 	}
 
 	private void drawBackground(Graphics g) {
+		g.setColor(Color.black);
+		g.fillRect(0, 0, getWidth(), getHeight());
 		
 	}
-		g.drawRect(0, 0, flag_width, flag_height);
-		g.fill()
 	
 	public void drawStripes(Graphics g) {
-		g.drawRect(0, A, L, stripe_height);
+		for (int i = 0; i <= STRIPES; i++) {
+			if (i % 2 == 1) {
+				g.setColor(Color.white);
+			}
+			else {
+				g.setColor(Color.red);
+			}
 		
+			g.fillRect(0, (int)(stripe_height * i), (int)flag_width, (int)stripe_height);
+		}
 	}
 
 	public void drawUnion(Graphics g) {
+		g.setColor(Color.blue);
+		g.fillRect(0, 0, union_width, union_height);
+		
 	}
+	
+	public void draw(Graphics g, int x, int y, double radius) {
+		double innerRadius = radius*Math.sin(Math.toRadians(18)/Math.sin(Math.toRadians(54)));
+		
+		for (int i = 18; i < 360; i += 72) {
+			polygonX[(i-18)/36] = x + (int) (radius * Math.cos(Math.toRadians(i)));
+			polygonY[(i-18)/36] = y - (int) (radius * Math.sin(Math.toRadians(i))); 
+		}
 
-	public void drawStars(Graphics g) {
+		for (int i = 54; i < 360; i += 72) {
+			polygonX[(i-18)/36] = x + (int) (innerRadius * Math.cos(Math.toRadians(i)));
+			polygonY[(i-18)/36] = y - (int) (innerRadius * Math.sin(Math.toRadians(i))); 
+		}
+		g.fillPolygon(polygonX, polygonY, STAR_POINTS);
 	}
+	
+	public void drawStars(Graphics g) {
+		g.setColor(Color.white);
+		
+		//star positions
+		int xOffset = (int)G;
+		int yOffset = (int)E;
+		int xSpacer = (int)((H / B) * flag_width);
+		int ySpacer = (int)((F / A) * flag_height);
+		
+		//separating longer rows and shorter rows of stars
+		double radius = K / B / 2 * flag_width;
+		int majorRows = 5;
+		int minorRows = 4;
+		int majorStars = 6;
+		int minorStars = 5;
+
+		for (int row = 0; row < majorRows; row++) {
+			for (int col = 0; col < majorStars; col++) {
+				// six stars
+				draw(g, (int) (xOffset + col * 2 * xSpacer),
+						(int) (yOffset + row * 2 * ySpacer), radius);
+			}
+		}
+
+		for (int row = 0; row < minorRows; row++) {
+			for (int col = 0; col < minorStars; col++) {
+				// five stars
+				draw(g, (int) (xOffset + xSpacer + col * 2 * xSpacer),
+						(int) (yOffset + ySpacer + row * 2 * ySpacer), radius);
+			}
+		}
+	}
+	
 }
- 
