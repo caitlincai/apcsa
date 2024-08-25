@@ -36,12 +36,9 @@ public class Flag extends JApplet {
 	private final double L = 1.0 / 13;  // Width of stripe
 
 	// You will need to set values for these in paint()
-	private double flag_width = getWidth();   // width of flag in pixels
-	private double flag_height = getHeight();  // height of flag in pixels
-	private double stripe_height = L; // height of an individual stripe in pixels
-	
-	private int union_width;
-	private int union_height;
+	private double flag_width;   // width of flag in pixels
+	private double flag_height;  // height of flag in pixels
+	private double stripe_height; // height of an individual stripe in pixels
 	
 	private int STAR_POINTS;
 	private int[] polygonX;
@@ -62,15 +59,6 @@ public class Flag extends JApplet {
 		
 		flag_width = width;
 		flag_height = height;
-		stripe_height = height / STRIPES;
-		
-		union_width = (int)((D / B) * flag_width);
-		union_height = (int)((C / A) * flag_height);
-		
-		STAR_POINTS = 10;
-		polygonX = new int[STAR_POINTS];
-		polygonY = new int[STAR_POINTS];
-		
 		
 		if ((B/A) * flag_height > flag_width) {  
 			flag_height = (flag_width / (B / A));
@@ -78,6 +66,11 @@ public class Flag extends JApplet {
 		else {                   
 			flag_width = (flag_height * (B / A));
 		}
+
+		stripe_height = flag_height / STRIPES;
+		STAR_POINTS = 10;
+		polygonX = new int[STAR_POINTS];
+		polygonY = new int[STAR_POINTS];
 		
 		drawBackground(g);
 		drawStripes(g);
@@ -106,21 +99,21 @@ public class Flag extends JApplet {
 
 	public void drawUnion(Graphics g) {
 		g.setColor(Color.blue);
-		g.fillRect(0, 0, union_width, union_height);
+		g.fillRect(0, 0, (int)((D / B) * flag_width), (int)(stripe_height * 7 - 1));
 		
 	}
 	
-	public void draw(Graphics g, int x, int y, double radius) {
+	public void draw(Graphics g, int centerX, int centerY, double radius) {
 		double innerRadius = radius*Math.sin(Math.toRadians(18)/Math.sin(Math.toRadians(54)));
 		
 		for (int i = 18; i < 360; i += 72) {
-			polygonX[(i-18)/36] = x + (int) (radius * Math.cos(Math.toRadians(i)));
-			polygonY[(i-18)/36] = y - (int) (radius * Math.sin(Math.toRadians(i))); 
+			polygonX[(i-18)/36] = centerX + (int) (radius * Math.cos(Math.toRadians(i)));
+			polygonY[(i-18)/36] = centerY - (int) (radius * Math.sin(Math.toRadians(i))); 
 		}
 
 		for (int i = 54; i < 360; i += 72) {
-			polygonX[(i-18)/36] = x + (int) (innerRadius * Math.cos(Math.toRadians(i)));
-			polygonY[(i-18)/36] = y - (int) (innerRadius * Math.sin(Math.toRadians(i))); 
+			polygonX[(i-18)/36] = centerX + (int) (innerRadius * Math.cos(Math.toRadians(i)));
+			polygonY[(i-18)/36] = centerY - (int) (innerRadius * Math.sin(Math.toRadians(i))); 
 		}
 		g.fillPolygon(polygonX, polygonY, STAR_POINTS);
 	}
@@ -129,8 +122,8 @@ public class Flag extends JApplet {
 		g.setColor(Color.white);
 		
 		//star positions
-		int xOffset = (int)G;
-		int yOffset = (int)E;
+		int xOffset = (int)(G / B * flag_width);
+		int yOffset = (int)(E / A * flag_height);
 		int xSpacer = (int)((H / B) * flag_width);
 		int ySpacer = (int)((F / A) * flag_height);
 		
