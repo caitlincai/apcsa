@@ -1,5 +1,5 @@
 # AP CS A
-projects and assignments from AP CS A (2024-25 sophomore year) 
+projects and assignments from my AP CS A class 2024-25 sophomore year!
 
 
 **flag**: resizable american flag using java and applet
