@@ -9,8 +9,7 @@ import javax.swing.event.*;
 public class SandDisplay extends JComponent implements MouseListener,
   MouseMotionListener, ActionListener, ChangeListener
 {
-	
-//private static final long serialVersionUID = 4368411742958911474L;
+
 private Image image;
   private int cellSize;
   private JFrame frame;
