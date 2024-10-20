@@ -11,7 +11,6 @@ public class SandLab {
 		lab.run();
 	}
 
-	// add constants for particle types here
 	public static final int EMPTY = 0;
 	public static final int METAL = 1;
 	public static final int SAND = 2;
@@ -24,7 +23,6 @@ public class SandLab {
 	Color blue = Color.BLUE;
 	Color pink = Color.PINK;
 
-	// do not add any more fields
 	private int[][] grid;
 	private SandDisplay display;
 
@@ -131,8 +129,7 @@ public class SandLab {
 			} 
 		}
 	}
-
-	// do not modify
+	
 	public void run() {
 		while (true) {
 			for (int i = 0; i < display.getSpeed(); i++)
